@@ -12,6 +12,7 @@ JuceLibraryCode/
 Builds/
 build/
 DerivedData/
+Graphs/
 
 ## Various settings
 *.pbxuser

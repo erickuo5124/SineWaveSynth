@@ -51,36 +51,24 @@ void SynthVoice::controllerMoved (int controllerNumber, int newControllerValue)
 
 void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int startSample, int numSamples)
 {
-    if (tailOff > 0.0)
-    {
-        for (int i = startSample; i < (startSample + numSamples); i++)
-        {
-            float value = std::sin(currentAngle) * level * tailOff;
-            outputBuffer.addSample(0, i, value);
-            outputBuffer.addSample(1, i, value);
-            
-            currentAngle += angleIncrement;
+    for (int i = startSample; i < (startSample + numSamples); i++) {
+        float value = std::sin(currentAngle);  // sine wave
+//        float value = std::sin(currentAngle) > 0 ? 1 : 0;  // square wave
+//        float value = std::asin(sin(currentAngle)); // triangle wave
+//        float value = std::atan(tan(currentAngle)); // sawtooth wave
+        float out = value * level * (tailOff > 0.0 ? tailOff : 1.0);
+        outputBuffer.addSample(0, i, out);
+        outputBuffer.addSample(1, i, out);
+        
+        currentAngle += angleIncrement;
+        if (tailOff > 0.0) {
             tailOff *= 0.99;
-            
-            if (tailOff <= 0.05)
-            {
+            if(tailOff <= 0.05){
                 clearCurrentNote();
                 angleIncrement = 0.0;
                 level = 0.0;
                 break;
             }
-        }
-
-    }
-    else
-    {
-        for (int i = startSample; i < (startSample + numSamples); i++)
-        {
-            float value = std::sin(currentAngle) * level;
-            outputBuffer.addSample(0, i, value);
-            outputBuffer.addSample(1, i, value);
-            
-            currentAngle += angleIncrement;
         }
     }
 }
