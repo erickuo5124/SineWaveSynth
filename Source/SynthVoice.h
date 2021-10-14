@@ -29,6 +29,8 @@ public:
     
     void setLevel(float newLevel);
     
+    void setWaveType(int type);
+    
 private:
     float level;
     float frequency;
@@ -36,4 +38,5 @@ private:
     float currentAngle;
     float angleIncrement;
     float tailOff;
+    int waveType;
 };

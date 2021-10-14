@@ -62,5 +62,7 @@ private:
     
     double lastSampleRate;
     
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameter();
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SineWaveSynAudioProcessor)
 };

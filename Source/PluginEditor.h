@@ -30,7 +30,9 @@ private:
     SineWaveSynAudioProcessor& audioProcessor;
     
     juce::Slider levelSlider;
+    juce::ComboBox waveSelector;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> levelSliderAttachment;
-
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveSelectorAttachment;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SineWaveSynAudioProcessorEditor)
 };

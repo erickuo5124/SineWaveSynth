@@ -20,16 +20,7 @@ SineWaveSynAudioProcessor::SineWaveSynAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    tree(*this, nullptr, "PARAM",
-         std::make_unique<juce::AudioParameterFloat>(
-                 "level",
-                 "Level",
-                 juce::NormalisableRange<float>(0.0f, 1.0f, 0.1f), 0.5f,
-                 juce::String(),
-                 juce::AudioProcessorParameter::genericParameter,
-                 [](float value, int){return juce::String(value);},
-                 [](juce::String text){return text.getFloatValue();}
-         ))
+    tree(*this, nullptr, "PARAM", createParameter())
 #endif
 {
     mySynth.clearSounds();
@@ -161,7 +152,8 @@ void SineWaveSynAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     for (int channel = 0; channel < mySynth.getNumVoices(); ++channel)
     {
         auto* myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(channel));
-        myVoice->setLevel(tree.getRawParameterValue("level")->load());
+        myVoice->setLevel(tree.getRawParameterValue("GAIN")->load());
+        myVoice->setWaveType(tree.getRawParameterValue("TYPE")->load());
     }
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
@@ -196,4 +188,18 @@ void SineWaveSynAudioProcessor::setStateInformation (const void* data, int sizeI
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SineWaveSynAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout SineWaveSynAudioProcessor::createParameter()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 1.0f, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(
+                                                                  "TYPE",
+                                                                  "Type",
+                                                                  juce::StringArray({"Sine", "Square", "Triangle", "Saw"}),
+                                                                  0));
+    
+    return { params.begin(), params.end() };
 }

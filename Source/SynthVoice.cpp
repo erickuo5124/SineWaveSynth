@@ -52,10 +52,14 @@ void SynthVoice::controllerMoved (int controllerNumber, int newControllerValue)
 void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int startSample, int numSamples)
 {
     for (int i = startSample; i < (startSample + numSamples); i++) {
-        float value = std::sin(currentAngle);  // sine wave
-//        float value = std::sin(currentAngle) > 0 ? 1 : 0;  // square wave
-//        float value = std::asin(sin(currentAngle)); // triangle wave
-//        float value = std::atan(tan(currentAngle)); // sawtooth wave
+        float value;
+        switch (waveType) {
+            case 0: value = std::sin(currentAngle); break; // sine wave
+            case 1: value = std::sin(currentAngle) > 0 ? 1 : 0; break; // square wave
+            case 2: value = std::asin(sin(currentAngle)); break; // triangle wave
+            case 3: value = std::atan(tan(currentAngle)); break; // sawtooth wave
+            default: value = std::sin(currentAngle); break; // use sine wave as default
+        }
         float out = value * level * (tailOff > 0.0 ? tailOff : 1.0);
         outputBuffer.addSample(0, i, out);
         outputBuffer.addSample(1, i, out);
@@ -76,4 +80,9 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int s
 void SynthVoice::setLevel(float newLevel)
 {
     level = newLevel;
+}
+
+void SynthVoice::setWaveType(int type)
+{
+    waveType = type;
 }

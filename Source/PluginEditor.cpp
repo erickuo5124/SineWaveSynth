@@ -22,10 +22,15 @@ SineWaveSynAudioProcessorEditor::SineWaveSynAudioProcessorEditor (SineWaveSynAud
                                 true,
                                 levelSlider.getTextBoxWidth(),
                                 levelSlider.getTextBoxHeight());
-    levelSliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.tree, "level", levelSlider));
+    
+    waveSelector.addItemList({ "Sine", "Square", "Triangle", "Saw" },  1);
+    waveSelector.setSelectedId(1);
+    
+    levelSliderAttachment = std::make_unique< juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.tree, "GAIN", levelSlider);
+    waveSelectorAttachment = std::make_unique< juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.tree, "TYPE", waveSelector);    
     
     addAndMakeVisible(levelSlider);
-
+    addAndMakeVisible(waveSelector);
 }
 
 SineWaveSynAudioProcessorEditor::~SineWaveSynAudioProcessorEditor()
@@ -55,4 +60,6 @@ void SineWaveSynAudioProcessorEditor::resized()
     int y = 100;
     
     levelSlider.setBounds(x, y, sliderWidth, sliderHeight);
+    
+    waveSelector.setBounds(100, 50, sliderWidth, sliderHeight/2);
 }
