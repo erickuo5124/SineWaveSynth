@@ -15,7 +15,7 @@ SineWaveSynAudioProcessorEditor::SineWaveSynAudioProcessorEditor (SineWaveSynAud
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (800, 600);
     levelSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     levelSlider.setValue(0.5);
     levelSlider.setTextBoxStyle(juce::Slider::TextBoxLeft,
@@ -31,6 +31,8 @@ SineWaveSynAudioProcessorEditor::SineWaveSynAudioProcessorEditor (SineWaveSynAud
     
     addAndMakeVisible(levelSlider);
     addAndMakeVisible(waveSelector);
+    addAndMakeVisible(spectrumPanel);
+    addAndMakeVisible(waveformPanel);
 }
 
 SineWaveSynAudioProcessorEditor::~SineWaveSynAudioProcessorEditor()
@@ -43,23 +45,25 @@ void SineWaveSynAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     g.setColour(juce::Colours::white);
-    int x = 50;
-    int y = 100;
-    int width = 50;
-    int height = levelSlider.getHeight();
-    
-    g.drawFittedText("Level", x, y, width, height, juce::Justification::centred, 1);
 }
 
 void SineWaveSynAudioProcessorEditor::resized()
 {
-    auto area = getLocalBounds();
-    int sliderWidth = area.getWidth() / 2;
-    int sliderHeight = area.getHeight() / 4;
-    int x = 100;
-    int y = 100;
-    
-    levelSlider.setBounds(x, y, sliderWidth, sliderHeight);
-    
-    waveSelector.setBounds(100, 50, sliderWidth, sliderHeight/2);
+    juce::Grid grid;
+     
+    using Track = juce::Grid::TrackInfo;
+    using Fr = juce::Grid::Fr;
+
+    grid.setGap(juce::Grid::Px(10));
+    grid.templateRows    = { Track (Fr (10)), Track(Fr(1)), Track(Fr(1)) };
+    grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
+
+    grid.items = {
+        juce::GridItem (waveformPanel),
+        juce::GridItem (spectrumPanel),
+        juce::GridItem (waveSelector).withArea({}, juce::GridItem::Span(2)),
+        juce::GridItem(levelSlider).withArea({}, juce::GridItem::Span(2))
+    };
+
+    grid.performLayout (getLocalBounds().reduced(20, 20));
 }

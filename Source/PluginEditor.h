@@ -10,6 +10,8 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "SpectrumAnalyser.h"
+#include "WaveformAnalyser.h"
 
 //==============================================================================
 /**
@@ -33,6 +35,9 @@ private:
     juce::ComboBox waveSelector;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> levelSliderAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveSelectorAttachment;
+    
+    SpectrumAnalyser spectrumPanel;
+    WaveformAnalyser waveformPanel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SineWaveSynAudioProcessorEditor)
 };

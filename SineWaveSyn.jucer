@@ -6,6 +6,10 @@
               pluginFormats="buildAU,buildVST3">
   <MAINGROUP id="KoMpkK" name="SineWaveSynth">
     <GROUP id="{7A670E94-FD9D-0AA6-C5CB-5B5A6151BE24}" name="Source">
+      <FILE id="EQIoKD" name="WaveformAnalyser.h" compile="0" resource="0"
+            file="Source/WaveformAnalyser.h"/>
+      <FILE id="dMtJTe" name="SpectrumAnalyser.h" compile="0" resource="0"
+            file="Source/SpectrumAnalyser.h"/>
       <FILE id="vkpxNj" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
       <FILE id="Hm4sqg" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
       <FILE id="Qo5whe" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
